@@ -1,0 +1,72 @@
+﻿@model List<Interests.Models.Post>
+@{
+    ViewBag.Title = "Index";
+}
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <img data-toggle="modal"
+                     data-target="#DetailsModal"
+                     data-id="@item.Id"
+                     id="modalLink"
+                     src="@Url.Action("GetImage", "Posts", new {id = item.Id})"
+                     alt="" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+        </tr>
+    }
+</table>
+
+
+<!-- DETAILS Modal -->
+<div class="fade modal"
+     id="DetailsModal"
+     role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close"
+                        data-dismiss="modal"
+                        type="button">
+                    &times;
+                </button>
+                <h4 id="post-id" class="modal-title"></h4>
+            </div>
+            <div id="post-image" class="modal-body">
+
+                @*@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-default"
+                    data-dismiss="modal"
+                    type="button">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("img").click(function () {
+
+
+                var dataId = $(this).data('id');
+                $('#post-id').html(dataId);
+            });
+        });
+    </script>
+}
+
