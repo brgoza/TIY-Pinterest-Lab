@@ -11,6 +11,7 @@ namespace Interests.Models
         public Guid Id { get; set; }
         public ApplicationUser Author { get; set; }
         public byte[] Image { get; set; }
+        public string ImageUrl => "/Post/GetImage/" + Id;
         public string LinkUrl { get; set; }
         public string Description { get; set; }
         public DateTime CreatedOn { get; set; }

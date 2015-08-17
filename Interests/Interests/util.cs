@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Mvc;
 using Interests.Models;
 
 namespace Interests
@@ -13,16 +14,25 @@ namespace Interests
     public static class Util
     {
         static readonly ApplicationDbContext Db = new ApplicationDbContext();
+
         public static byte[] GetImageBytes(string url)
         {
             var client = new WebClient();
             var imageArray = client.DownloadData(url);
-      
+
             return ResizeImage(imageArray, 100, 100);
         }
-        public static byte[] GetImageBytes(Guid userId)
+
+        //}
+        //public static byte[] GetUserImageBytes(Guid userId)
+        //{
+        //    var imageArray = Db.Users.Find(userId).Image;
+        //    return ResizeImage(imageArray, 100, 100);
+        //}
+
+        public static byte[] GetPostImageBytes(Guid postId)
         {
-            var imageArray = Db.Users.Find(userId).Image;
+            var imageArray = Db.Posts.Find(postId).Image;
             return ResizeImage(imageArray, 100, 100);
         }
         public static byte[] ResizeImage(byte[] source, int maxWidth, int maxHeight)
@@ -42,5 +52,7 @@ namespace Interests
             bmp.Save(ms, ImageFormat.Jpeg);
             return ms.ToArray();
         }
+
+
     }
 }

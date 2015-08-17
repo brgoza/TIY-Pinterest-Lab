@@ -1,28 +1,13 @@
-﻿@model List<Interests.Models.Post>
+﻿@using Interests.Controllers
+@using Interests.Models
 @{
     ViewBag.Title = "Index";
 }
-<table class="table">
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                <img data-toggle="modal"
-                     data-target="#DetailsModal"
-                     data-id="@item.Id"
-                     id="modalLink"
-                     src="@Url.Action("GetImage", "Posts", new {id = item.Id})"
-                     alt="" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedOn)
-            </td>
-        </tr>
-    }
-</table>
+<body ng-controller="interestsController">
+    <div ng-repeat="interest in interests">
+        <p>{{interest.Description}} </p>
+    </div>
+</body>
 
 
 <!-- DETAILS Modal -->
@@ -37,36 +22,47 @@
                         type="button">
                     &times;
                 </button>
-                <h4 id="post-id" class="modal-title"></h4>
+                <h4 class="modal-title"
+                    id="post-title"></h4>
             </div>
-            <div id="post-image" class="modal-body">
+            <div class="modal-body">
+                <img id="post-image"
+                     src="">
+                </img>
 
-                @*@Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })*@
             </div>
-        </div>
 
-        <div class="modal-footer">
-            <button class="btn btn-default"
-                    data-dismiss="modal"
-                    type="button">
-                Close
-            </button>
+            <div class="modal-footer">
+                <button class="btn btn-default"
+                        data-dismiss="modal"
+                        type="button">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
-@section scripts
-{
+
+@section scripts{
     <script>
-        $(document).ready(function () {
-            $("img").click(function () {
+        (function () {
+            var app = angular.module("myApp", []);
 
+            app.controller("interestsController", function ($scope, $http) {
 
-                var dataId = $(this).data('id');
-                $('#post-id').html(dataId);
+                $scope.LoadAllInterests = function () {
+                    $http.get("/Posts/AllInterests")
+
+                        .success(function (response) { $scope.interests = response; });
+                         console.log("!");
+                };
+
+                $scope.SaveNewInterest = function (newPin) {
+                    $http.post("/Posts/SaveNewInterest", newPin);
+                };
+                $scope.LoadAllInterests();
             });
-        });
+        })();
     </script>
 }
-

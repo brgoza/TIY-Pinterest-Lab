@@ -1,0 +1,28 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html ng-app="store">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script type="text/javascript"
+            src="~/Scripts/angular.min.js"></script>
+    <script type="text/javascript"
+            src="~/Scripts/app.js"></script>
+    <title>Test</title>
+</head>
+<body>
+<div ng-controller = "StoreController as store" >
+
+    <h1>Product name: {{store.product.name}}</h1>
+    <h3>Product cost: {{store.product.price}}</h3>
+    <h4>Prodcut description: {{store.product.description}}</h4>
+</div>
+   
+    <div>
+
+    </div>
+</body>
+</html>
