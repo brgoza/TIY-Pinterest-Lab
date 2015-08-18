@@ -1,14 +1,19 @@
 ﻿@using Interests.Controllers
 @using Interests.Models
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Index";
 }
 <body ng-controller="interestsController">
-    <div ng-repeat="interest in interests">
-        <p>{{interest.Description}} </p>
+    <div class="container">
+        <div class="row" ng-repeat="interest in interests">
+            <div >{{interest.ImageUrl}}</div>
+            <a ng-href="{{interest.LinkUrl}}"><img class="col-xs-3" ng-src="{{interest.ImageUrl}}" /></a>
+            <h6 class="col-xs-6"> {{interest.Description}} </h6>
+            <span class="col-xs-3">{{interest.CreatedOn | date: 'medium'}}</span>
+        </div>
     </div>
 </body>
-
 
 <!-- DETAILS Modal -->
 <div class="fade modal"
@@ -26,9 +31,6 @@
                     id="post-title"></h4>
             </div>
             <div class="modal-body">
-                <img id="post-image"
-                     src="">
-                </img>
 
             </div>
 
@@ -44,7 +46,43 @@
 </div>
 
 
+<!-- CREATE Modal -->
+<div class="fade modal"
+     id="CreateModal"
+     role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close"
+                        data-dismiss="modal"
+                        type="button">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    New Post
+                </h4>
+            </div>
+            <div class="modal-body">
+                <textarea id="newPostDescriptionTA">Description:</textarea>
+
+            </div>
+
+            <div class="modal-footer">
+                <button id="newPostButton"
+                        class="btn btn-default"
+                        data-dismiss="modal"
+                        type="button">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section scripts{
+    
+
     <script>
         (function () {
             var app = angular.module("myApp", []);
@@ -53,14 +91,34 @@
 
                 $scope.LoadAllInterests = function () {
                     $http.get("/Posts/AllInterests")
+                        .success(function (response) {
+                            angular.forEach(response.Posts, function (value, key) {
+                                console.log(response.Posts[key].CreatedOn);
 
-                        .success(function (response) { $scope.interests = response; });
-                         console.log("!");
+                                response.Posts[key].CreatedOn = new Date(response.Posts[key].CreatedOn.replace(/-/g, "/"));
+                            });
+                            $scope.interests = response;
+                        });
                 };
 
-                $scope.SaveNewInterest = function (newPin) {
-                    $http.post("/Posts/SaveNewInterest", newPin);
+                $scope.SaveNewInterest = function (newInterest) {
+                    console.log("Posting " + newInterest);
+                    $http.post("/Posts/NewPost", newInterest);
+                    console.log("Attempting to add to collection" + $scope.interests.item);
+                    $scope.interests.Item.add(newInterest);
+                    console.log($scope.interests);
                 };
+
+                $("#newPostButton").click(function () {
+
+                    var description = $("#newPostDescriptionTA").val();
+                    var created = Date.now();
+                    @*var author = @HttpContext.Current.User.Identity.GetUserId();*@
+                    var newPost = { Description: description, CreatedOn: created };
+                    $scope.SaveNewInterest(newPost);
+                    console.log(newPost);
+
+                });
                 $scope.LoadAllInterests();
             });
         })();

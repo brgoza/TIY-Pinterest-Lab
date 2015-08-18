@@ -11,15 +11,19 @@
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <div class = "navbar-header" >
+                <button type = "button"
+                    class = "navbar-toggle"
+                    data-toggle = "collapse"
+                    data-target = ".navbar-collapse" >
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Posts", new { area = "" }, new { @class = "navbar-brand" })
-           
+                @Html.ActionLink("Application name", "Index", "Posts", new {area = ""}, new {@class = "navbar-brand"})
+
             </div>
+            <button class="navbar-btn" style="align-content: flex-end" id="CreateButton" data-toggle="modal" data-target="#CreateModal">New Post</button>
             @Html.Partial("_LoginPartial")
         </div>
     </div>

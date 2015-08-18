@@ -14,15 +14,15 @@ namespace Interests.Controllers
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
         // GET: Posts
-        public ActionResult Index()
-        {
+        public ActionResult Index() { 
+     //   {Post.FixLinkUrls();
             //Configuration.tmp(db);
             return View();
         }
 
         public ActionResult AllInterests()
         {
-            var posts = db.Posts;
+            var posts = db.Posts.ToList().Select(x=> new {x.LinkUrl, x.ImageUrl, x.CreatedOn,x.Author,x.Id,x.Description}).ToList();
             return Json(posts,JsonRequestBehavior.AllowGet);
         }
 
@@ -30,6 +30,14 @@ namespace Interests.Controllers
         {
             var post = db.Posts.Find(id);
             return File(post.Image, "image");
+        }
+
+        public ActionResult NewPost(Post newPost)
+        {
+            db.Posts.Add(newPost);
+            db.SaveChanges();
+
+            return Json(newPost,JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
