@@ -23,21 +23,22 @@ namespace Interests
             return ResizeImage(imageArray, 100, 100);
         }
 
-        //}
-        //public static byte[] GetUserImageBytes(Guid userId)
-        //{
-        //    var imageArray = Db.Users.Find(userId).Image;
-        //    return ResizeImage(imageArray, 100, 100);
-        //}
+    
+    //public static byte[] GetUserImageBytes(Guid userId)
+    //{
+    //    var imageArray = Db.Users.Find(userId).Image;
+    //    return ResizeImage(imageArray, 100, 100);
+    //}
 
-        public static byte[] GetPostImageBytes(Guid postId)
+    //public static byte[] GetPostImageBytes(Guid postId)
+    //{
+    //    var imageArray = Db.Posts.Find(postId).Image;
+    //    return ResizeImage(imageArray, 100, 100);
+    //}
+
+    public static byte[] ResizeImage(byte[] source, int maxWidth, int maxHeight)
         {
-            var imageArray = Db.Posts.Find(postId).Image;
-            return ResizeImage(imageArray, 100, 100);
-        }
-        public static byte[] ResizeImage(byte[] source, int maxWidth, int maxHeight)
-        {
-            var image = System.Drawing.Image.FromStream(new MemoryStream(source));
+            var image = Image.FromStream(new MemoryStream(source));
             var ratioX = (double)maxWidth / image.Width;
             var ratioY = (double)maxHeight / image.Height;
             var ratio = Math.Min(ratioX, ratioY);

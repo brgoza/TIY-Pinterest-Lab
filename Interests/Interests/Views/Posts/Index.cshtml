@@ -6,14 +6,19 @@
 }
 <body ng-controller="interestsController">
     <div class="container">
-        <div class="row" ng-repeat="interest in interests">
-            <div >{{interest.ImageUrl}}</div>
-            <a ng-href="{{interest.LinkUrl}}"><img class="col-xs-3" ng-src="{{interest.ImageUrl}}" /></a>
+        <div class="row"
+             ng-repeat="interest in interests">
+            <div>{{interest.ImageUrl}}</div>
+            <a ng-href="{{interest.LinkUrl}}">
+                <img class="col-xs-3"
+                     ng-src="{{interest.ImageUrl}}" />
+            </a>
             <h6 class="col-xs-6"> {{interest.Description}} </h6>
             <span class="col-xs-3">{{interest.CreatedOn | date: 'medium'}}</span>
         </div>
     </div>
 </body>
+@*<img ng-src="data:image/JPEG;base64,{{image}}">*@
 
 <!-- DETAILS Modal -->
 <div class="fade modal"
@@ -64,7 +69,8 @@
             </div>
             <div class="modal-body">
                 <textarea id="newPostDescriptionTA">Description:</textarea>
-
+                <textarea id="newPostImageUrl">Image Url:</textarea>
+                <textarea id="newPostLinkUrl">Link Url:</textarea>
             </div>
 
             <div class="modal-footer">
@@ -81,18 +87,18 @@
 
 
 @section scripts{
-    
+
 
     <script>
-        (function () {
+        (function() {
             var app = angular.module("myApp", []);
 
-            app.controller("interestsController", function ($scope, $http) {
+            app.controller("interestsController", function($scope, $http) {
 
-                $scope.LoadAllInterests = function () {
+                $scope.LoadAllInterests = function() {
                     $http.get("/Posts/AllInterests")
-                        .success(function (response) {
-                            angular.forEach(response.Posts, function (value, key) {
+                        .success(function(response) {
+                            angular.forEach(response.Posts, function(value, key) {
                                 console.log(response.Posts[key].CreatedOn);
 
                                 response.Posts[key].CreatedOn = new Date(response.Posts[key].CreatedOn.replace(/-/g, "/"));
@@ -101,22 +107,38 @@
                         });
                 };
 
-                $scope.SaveNewInterest = function (newInterest) {
-                    console.log("Posting " + newInterest);
-                    $http.post("/Posts/NewPost", newInterest);
-                    console.log("Attempting to add to collection" + $scope.interests.item);
-                    $scope.interests.Item.add(newInterest);
-                    console.log($scope.interests);
+                $scope.SaveNewInterest = function(newPost) {
+
+                    console.log("Saved to db.. attempting to add to collection.");
+                    $scope.interests.push(newPost);
+                    console.log("Added to collection.");
                 };
 
-                $("#newPostButton").click(function () {
-
+                $("#newPostButton").click(function() {
+                    console.log("initializing var img");
+                    var img;
+                    //  var id = new guid;
+                    console.log("Getting description:");
                     var description = $("#newPostDescriptionTA").val();
-                    var created = Date.now();
-                    @*var author = @HttpContext.Current.User.Identity.GetUserId();*@
-                    var newPost = { Description: description, CreatedOn: created };
+                    console.log(description);
+
+                    // var link
+                    console.log("Getting image Url:");
+                    var imageUrl = $("#newPostImageUrl").val();
+                    var image;
+                    console.log("Attempting to get image array from " + imageUrl);
+                    $http.post("/Posts/GetImageBytes?url="+imageUrl,"image")
+                        .success(function(response) { image = response; });
+
+                 var newPost = { Description: description, Image: image };
+
+
+                 newPost = $http.post("/Posts/NewPost", newPost)
+                        .success(function (response) {newPost=response});
+                    console.log("posted.");
+                    console.log("SaveNewInterest(" + newPost + ")");
                     $scope.SaveNewInterest(newPost);
-                    console.log(newPost);
+                    console.log("done.");
 
                 });
                 $scope.LoadAllInterests();

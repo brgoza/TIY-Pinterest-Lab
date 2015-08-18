@@ -10,7 +10,7 @@ namespace Interests.Models
     {
         public Guid Id { get; set; }
         public ApplicationUser Author { get; set; }
-       // public string AuthorId => Author.Id;
+        // public string AuthorId => Author.Id;
         public byte[] Image { get; set; }
         public string ImageUrl => "/Posts/GetPostImage/" + Id;
         public string LinkUrl { get; set; }
@@ -23,6 +23,18 @@ namespace Interests.Models
             foreach (var p in db.Posts)
             {
                 p.LinkUrl = "http://google.com";
+            }
+            db.SaveChanges();
+        }
+
+        public static void DeletePostsWithoutImages()
+        {
+            var db = new ApplicationDbContext();
+            var newPosts = new List<Post>();
+
+            foreach (var p in db.Posts.Where(p => p.Image == null))
+            {
+                db.Posts.Remove(p);
             }
             db.SaveChanges();
         }
