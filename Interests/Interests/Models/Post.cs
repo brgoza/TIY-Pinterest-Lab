@@ -58,10 +58,7 @@ namespace Interests.Models
             bmp.Save(ms, ImageFormat.Jpeg);
             return ms.ToArray();
         }
-
-
-
-
+        
         public static void FixLinkUrls()
         {
             var db = new ApplicationDbContext();

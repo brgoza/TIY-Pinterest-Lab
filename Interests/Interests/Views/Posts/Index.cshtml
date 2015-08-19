@@ -1,44 +1,48 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Interests";
 }
-<body ng-controller="interestsController">
-    <div class="container">
-        <div class="row"
-             ng-repeat="interest in interests">
-            <a ng-href="{{interest.LinkUrl}}">
-                <img class="col-xs-3"
-                     ng-src="{{interest.ImageUrl}}" />
+<body ng-controller = "interestsController" >
+<div class = "grid" >
+    
+        <div class = "grid-item grid-item--height2"
+            ng-repeat = "interest in interests" >
+            <a ng-href = "{{interest.LinkUrl}}" >
+                <img alt = ""
+                    ng-src = "{{interest.ImageUrl}}"/>
             </a>
-            <h6 class="col-xs-6"> {{interest.Description}} </h6>
-            <span class="col-xs-3">{{interest.CreatedOn | date: 'medium'}}</span>
+            <div class = "text-info"
+                style = "font-size: 2em; color:black" >
+                {{interest.Description}}
+            </div>
+            <div class = "text-muted" style="color: darkblue">{{interest.CreatedOn | date: 'medium'}}</div>
         </div>
-    </div>
+    
+</div>
 </body>
-@*<img ng-src="data:image/JPEG;base64,{{image}}">*@
-
 <!-- DETAILS Modal -->
-<div class="fade modal"
-     id="DetailsModal"
-     role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close"
-                        data-dismiss="modal"
-                        type="button">
+<div class = "fade modal"
+    id = "DetailsModal"
+    role = "dialog" >
+    <div class = "modal-dialog" >
+        <div class = "modal-content" >
+            <div class = "modal-header" >
+                <button class = "close"
+                    data-dismiss = "modal"
+                    type = "button" >
                     &times;
                 </button>
-                <h4 class="modal-title"
-                    id="post-title"></h4>
+                <h4 class = "modal-title"
+                    id = "post-title" >
+                </h4>
             </div>
-            <div class="modal-body">
+            <div class = "modal-body" >
 
             </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-default"
-                        data-dismiss="modal"
-                        type="button">
+            <div class = "modal-footer" >
+                <button class = "btn btn-default"
+                    data-dismiss = "modal"
+                    type = "button" >
                     Close
                 </button>
             </div>
@@ -48,32 +52,32 @@
 
 
 <!-- CREATE Modal -->
-<div class="fade modal"
-     id="CreateModal"
-     role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close"
-                        data-dismiss="modal"
-                        type="button">
+<div class = "fade modal"
+    id = "CreateModal"
+    role = "dialog" >
+    <div class = "modal-dialog" >
+        <div class = "modal-content" >
+            <div class = "modal-header" >
+                <button class = "close"
+                    data-dismiss = "modal"
+                    type = "button" >
                     &times;
                 </button>
-                <h4 class="modal-title">
+                <h4 class = "modal-title" >
                     New Post
                 </h4>
             </div>
-            <div class="modal-body">
-                <textarea id="newPostDescriptionTA">Description:</textarea>
-                <textarea id="newPostImageUrl">Image Url:</textarea>
-                <textarea id="newPostLinkUrl">Link Url:</textarea>
+            <div class = "modal-body" >
+                <textarea id = "newPostDescriptionTA" >Description:</textarea>
+                <textarea id = "newPostImageUrl" >Image Url:</textarea>
+                <textarea id = "newPostLinkUrl" >Link Url:</textarea>
             </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-default"
-                        data-dismiss="modal"
-                        id="newPostButton"
-                        type="button">
+            <div class = "modal-footer" >
+                <button class = "btn btn-default"
+                    data-dismiss = "modal"
+                    id = "newPostButton"
+                    type = "button" >
                     Close
                 </button>
             </div>
@@ -86,21 +90,21 @@
 
 
     <script>
-        (function () {
+        (function() {
             var app = angular.module("myApp", []);
 
-            app.controller("interestsController", function ($scope, $http) {
+            app.controller("interestsController", function($scope, $http) {
 
-                $scope.LoadAllInterests = function () {
+                $scope.LoadAllInterests = function() {
                     $http.get("/Posts/AllInterests")
-                        .success(function (response) {
+                        .success(function(response) {
                             $scope.interests = response;
                         });;
                 };
 
                 $scope.LoadAllInterests();
 
-                $("#newPostButton").click(function () {
+                $("#newPostButton").click(function() {
                     var description = $("#newPostDescriptionTA").val();
                     var url = $("newPostLinkUrl").val();
                     var imageUrl = $("#newPostImageUrl").val();
@@ -108,12 +112,28 @@
                     var newPost = { Description: description, imageUrl: imageUrl, LinkUrl: url };
 
                     $http.post("/Posts/NewPost", newPost)
-                        .success(function (response) {
+                        .success(function(response) {
                             $scope.interests.push(response);
-                        });
+                     });
                 });
 
             });
         })();
     </script>
+<script>
+        var $grid = $('.grid').imagesLoaded(function() {
+
+            $grid.isotope({
+                itemSelector: '.grid-item',
+                percentPosition: true,
+                masonry: {
+                    columnWidth: 50,
+                    isFitWidth: true
+                }
+            });
+        });
+</script>
+  
+
+});
 }

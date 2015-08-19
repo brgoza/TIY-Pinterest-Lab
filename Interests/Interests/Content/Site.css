@@ -1,17 +1,89 @@
-﻿body {
+﻿* {
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+   
+}
+
+/* force scrollbar, prevents initial gap */
+html {
+   
+    overflow-y: scroll;
+}
+
+body {
+    font-family: script;
+       background-color: black;
+    -moz-box-shadow: 0 0 400px black;
+    -webkit-box-shadow: 0 0 400px black;
+    box-shadow: 0 0 400px black;
     padding-top: 50px;
     padding-bottom: 20px;
 }
 
-/* Set padding to keep content from hitting the edges */
+/* ---- grid ---- */
+
+.grid {
+    /*background-repeat: repeat;
+    background-image: url("~/content/bbTexture.png");*/
+}
+
+    /* clear fix */
+    .grid:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+
+/*.grid-sizer {
+    width: 100%;
+}*/
+
+img {
+    -moz-box-shadow: 0 0 30px black;
+    -webkit-box-shadow: 0 0 25px black;
+    box-shadow: 0 0 40px black;
+    border-color: gold;
+    border-width: 5px;
+    border-style: groove;
+}
+
+.grid-item {
+    float: right;
+    height: 30%;
+    width: 20%;
+    -moz-box-shadow: 0 0 30px black;
+    -webkit-box-shadow: 0 0 30px black;
+    box-shadow: 0 0 30px black;
+    background: #CC9900;
+    border:  solid green;
+    border-color: black;
+    padding: 4px;
+}
+
+.grid-item--width2 {
+    width: 200%;
+}
+
+.grid-item--height2 {
+    height: 200%;
+}
+
+
+
 .body-content {
+    background-image: url("/content/bbTexture.png");
+    background-repeat: repeat;
+      
+    border-color: #6B2400;
+    border-style: groove;
+    border-width: 15px;
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
+
 .dl-horizontal dt {
     white-space: normal;
 }
@@ -20,5 +92,5 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+    max-width: 1200px;
 }
