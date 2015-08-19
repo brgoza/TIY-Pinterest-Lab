@@ -1,14 +1,10 @@
-﻿@using Interests.Controllers
-@using Interests.Models
-@using Microsoft.AspNet.Identity
-@{
+﻿@{
     ViewBag.Title = "Index";
 }
 <body ng-controller="interestsController">
     <div class="container">
         <div class="row"
              ng-repeat="interest in interests">
-            <div>{{interest.ImageUrl}}</div>
             <a ng-href="{{interest.LinkUrl}}">
                 <img class="col-xs-3"
                      ng-src="{{interest.ImageUrl}}" />
@@ -74,9 +70,9 @@
             </div>
 
             <div class="modal-footer">
-                <button id="newPostButton"
-                        class="btn btn-default"
+                <button class="btn btn-default"
                         data-dismiss="modal"
+                        id="newPostButton"
                         type="button">
                     Close
                 </button>
@@ -90,58 +86,33 @@
 
 
     <script>
-        (function() {
+        (function () {
             var app = angular.module("myApp", []);
 
-            app.controller("interestsController", function($scope, $http) {
+            app.controller("interestsController", function ($scope, $http) {
 
-                $scope.LoadAllInterests = function() {
+                $scope.LoadAllInterests = function () {
                     $http.get("/Posts/AllInterests")
-                        .success(function(response) {
-                            angular.forEach(response.Posts, function(value, key) {
-                                console.log(response.Posts[key].CreatedOn);
-
-                                response.Posts[key].CreatedOn = new Date(response.Posts[key].CreatedOn.replace(/-/g, "/"));
-                            });
+                        .success(function (response) {
                             $scope.interests = response;
-                        });
+                        });;
                 };
 
-                $scope.SaveNewInterest = function(newPost) {
-
-                    console.log("Saved to db.. attempting to add to collection.");
-                    $scope.interests.push(newPost);
-                    console.log("Added to collection.");
-                };
-
-                $("#newPostButton").click(function() {
-                    console.log("initializing var img");
-                    var img;
-                    //  var id = new guid;
-                    console.log("Getting description:");
-                    var description = $("#newPostDescriptionTA").val();
-                    console.log(description);
-
-                    // var link
-                    console.log("Getting image Url:");
-                    var imageUrl = $("#newPostImageUrl").val();
-                    var image;
-                    console.log("Attempting to get image array from " + imageUrl);
-                    $http.post("/Posts/GetImageBytes?url="+imageUrl,"image")
-                        .success(function(response) { image = response; });
-
-                 var newPost = { Description: description, Image: image };
-
-
-                 newPost = $http.post("/Posts/NewPost", newPost)
-                        .success(function (response) {newPost=response});
-                    console.log("posted.");
-                    console.log("SaveNewInterest(" + newPost + ")");
-                    $scope.SaveNewInterest(newPost);
-                    console.log("done.");
-
-                });
                 $scope.LoadAllInterests();
+
+                $("#newPostButton").click(function () {
+                    var description = $("#newPostDescriptionTA").val();
+                    var url = $("newPostLinkUrl").val();
+                    var imageUrl = $("#newPostImageUrl").val();
+
+                    var newPost = { Description: description, imageUrl: imageUrl, LinkUrl: url };
+
+                    $http.post("/Posts/NewPost", newPost)
+                        .success(function (response) {
+                            $scope.interests.push(response);
+                        });
+                });
+
             });
         })();
     </script>

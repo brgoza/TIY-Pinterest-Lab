@@ -14,13 +14,10 @@ namespace Interests.Controllers
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
-        // GET: Posts
+   
         public ActionResult Index()
         {
-            //   {Post.FixLinkUrls();
-            //Configuration.tmp(db);
-            //  Post.DeletePostsWithoutImages();
-            return View();
+          return View();
         }
 
         public ActionResult AllInterests()
@@ -34,18 +31,10 @@ namespace Interests.Controllers
             var post = db.Posts.Find(id);
             return File(post.Image, "image");
         }
-        public ActionResult GetImageBytes(string url)
-        {
-            var client = new WebClient();
-            var imageArray = client.DownloadData(url);
-
-            return File(Util.ResizeImage(imageArray, 100, 100), "image");
-        }
-
-        public ActionResult NewPost(Post newPost)
-        {
-            newPost.CreatedOn = DateTime.Now;
-            newPost.Id = Guid.NewGuid();
+       
+        public ActionResult NewPost(string description,  string imageUrl, string linkUrl)
+       {
+            var newPost = new Post(description,imageUrl,linkUrl);
             db.Posts.Add(newPost);
             db.SaveChanges();
 

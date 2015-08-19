@@ -15,13 +15,6 @@ namespace Interests
     {
         static readonly ApplicationDbContext Db = new ApplicationDbContext();
 
-        public static byte[] GetImageBytes(string url)
-        {
-            var client = new WebClient();
-            var imageArray = client.DownloadData(url);
-
-            return ResizeImage(imageArray, 100, 100);
-        }
 
     
     //public static byte[] GetUserImageBytes(Guid userId)
