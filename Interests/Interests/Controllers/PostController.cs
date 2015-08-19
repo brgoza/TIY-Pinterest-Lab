@@ -16,7 +16,7 @@ namespace Interests.Controllers
         private readonly ApplicationDbContext db = new ApplicationDbContext();
    
         public ActionResult Index()
-        {Seeder.Seed(db);
+        {
 
           return View();
         }
